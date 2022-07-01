@@ -1,9 +1,11 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import { StyleSheet, View } from 'react-native';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Button, Gap, TextInput } from '../../components';
 import Header from '../../components/molecules/Header';
-import {Button, Gap, TextInput} from '../../components';
-import { useForm } from '../../utils';
-import Axios from 'axios';
+import { signInAction } from '../../redux/action/auth';
+import { getData, useForm } from '../../utils';
+import { useEffect } from 'react';
 
 const SignIn = ({navigation}) => {
   // const [email, setEmail] = useState('');
@@ -14,15 +16,12 @@ const SignIn = ({navigation}) => {
     password:''
   });
 
+  const dispatch = useDispatch();
+
+
+
   const onSubmit = () => {
-    console.log('form : ', form);
-    Axios.post('http://foodmarket-backend.buildwithangga.id/api/login', form)
-    .then(res=>{
-      console.log('success', res);
-    })
-    .catch(err => {
-      console.log('error', err);
-    })
+    dispatch(signInAction(form, navigation))
   };
 
   return (

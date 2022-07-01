@@ -1,187 +1,103 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
-import {ItemListFood} from '..';
-import {
-  FoodDummy1,
-  FoodDummy2,
-  FoodDummy3,
-  FoodDummy4,
-  FoodDummy6,
-} from '../../../assets';
+import {useDispatch, useSelector} from 'react-redux';
+import {getFoodDataByTypes} from '../../../redux/action';
+import ItemListFood from '../ItemListFood';
 
-const renderTabBar = props => (
+const renderTabBar = (props) => (
   <TabBar
     {...props}
-    indicatorStyle={{
-      backgroundColor: '#020202',
-      height: 3,
-      marginLeft: '3%',
-      width: '15%',
-    }}
-    style={{
-      backgroundColor: 'white',
-      elevation: 0,
-      shadowOpacity: 0,
-      borderBottomColor: '#F2F2F2',
-      borderBottomWidth: 1,
-    }}
-    tabStyle={{width: 'auto'}}
-    renderLabel={({route, focused, color}) => (
-      <Text
-        style={{
-          fontFamily: 'Poppins-Medium',
-          fontSize: 14,
-          color: focused ? '#020202' : '#8D92A3',
-        }}>
-        {route.title}
-      </Text>
+    indicatorStyle={styles.indicator}
+    style={styles.tabBarStyle}
+    tabStyle={styles.tabStyle}
+    renderLabel={({route, focused}) => (
+      <Text style={styles.tabText(focused)}>{route.title}</Text>
     )}
   />
 );
 
 const NewTaste = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {newTaste} = useSelector((state) => state.homeReducer);
+
+  useEffect(() => {
+    dispatch(getFoodDataByTypes('new_food'));
+  }, []);
+
   return (
-    <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy1}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy2}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy3}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy4}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy6}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
+    <View style={styles.containerNewTaste}>
+      {newTaste.map((item) => {
+        return (
+          <ItemListFood
+            key={item.id}
+            type="product"
+            name={item.name}
+            price={item.price}
+            rating={item.rate}
+            image={{uri: item.picturePath}}
+            onPress={() => navigation.navigate('FoodDetail', item)}
+          />
+        );
+      })}
     </View>
   );
 };
 
 const Popular = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {popular} = useSelector((state) => state.homeReducer);
+
+  useEffect(() => {
+    dispatch(getFoodDataByTypes('popular'));
+  }, []);
 
   return (
-    <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy2}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy3}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy1}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy4}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy1}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
+    <View style={styles.containerPopular}>
+      {popular.map((item) => {
+        return (
+          <ItemListFood
+            key={item.id}
+            type="product"
+            name={item.name}
+            price={item.price}
+            rating={item.rate}
+            image={{uri: item.picturePath}}
+            onPress={() => navigation.navigate('FoodDetail', item)}
+          />
+        );
+      })}
     </View>
   );
 };
 
 const Recommended = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {recommended} = useSelector((state) => state.homeReducer);
+
+  useEffect(() => {
+    dispatch(getFoodDataByTypes('recommended'));
+  }, []);
+
   return (
-    <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy4}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy2}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy3}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy1}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
-      <ItemListFood
-        type="product"
-        name="Sop Bumil"
-        price="2.000.000"
-        image={FoodDummy6}
-        rating={3}
-        onPress={() => navigation.navigate('FoodDetail')}
-      />
+    <View style={styles.containerRecommended}>
+      {recommended.map((item) => {
+        return (
+          <ItemListFood
+            key={item.id}
+            type="product"
+            name={item.name}
+            price={item.price}
+            rating={item.rate}
+            image={{uri: item.picturePath}}
+            onPress={() => navigation.navigate('FoodDetail', item)}
+          />
+        );
+      })}
     </View>
   );
 };
@@ -195,11 +111,13 @@ const HomeTabSection = () => {
     {key: '2', title: 'Popular'},
     {key: '3', title: 'Recommended'},
   ]);
+
   const renderScene = SceneMap({
     1: NewTaste,
     2: Popular,
     3: Recommended,
   });
+
   return (
     <TabView
       renderTabBar={renderTabBar}
@@ -207,11 +125,34 @@ const HomeTabSection = () => {
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
-      style={{backgroundColor: 'white'}}
+      style={styles.tabView}
     />
   );
 };
 
 export default HomeTabSection;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  tabView: {backgroundColor: 'white'},
+  indicator: {
+    backgroundColor: '#020202',
+    height: 3,
+    width: '15%',
+    marginLeft: '3%',
+  },
+  tabBarStyle: {
+    backgroundColor: 'white',
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomColor: '#F2F2F2',
+    borderBottomWidth: 1,
+  },
+  tabStyle: {width: 'auto'},
+  tabText: (focused) => ({
+    fontFamily: 'Poppins-Medium',
+    color: focused ? '#020202' : '#8D92A3',
+  }),
+  containerNewTaste: {paddingTop: 8, paddingHorizontal: 24},
+  containerPopular: {paddingTop: 8, paddingHorizontal: 24},
+  containerRecommended: {paddingTop: 8, paddingHorizontal: 24},
+});

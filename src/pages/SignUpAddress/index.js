@@ -2,11 +2,11 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Header from '../../components/molecules/Header';
 import {Button, Gap, Select, TextInput} from '../../components';
-import {useForm} from '../../utils';
+import {showMessage, useForm} from '../../utils';
 import {useDispatch, useSelector} from 'react-redux';
-import { showMessage, hideMessage } from "react-native-flash-message";
 
 import Axios from 'axios';
+import { setLoading, signUpAction } from '../../redux/action';
 
 const SignUpAddress = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -18,7 +18,8 @@ const SignUpAddress = ({navigation}) => {
 
   const dispatch = useDispatch();
 
-  const registerReducer = useSelector(state => state.registerReducer);
+  // const registerReducer = useSelector(state => state.registerReducer);
+  const {registerReducer, photoReducer} = useSelector((state) => state);
 
   const onSubmit = () => {
     const data = {
@@ -26,51 +27,44 @@ const SignUpAddress = ({navigation}) => {
       ...registerReducer,
     };
 
-    //  const data = {
-    //   "name":"cobaa",
-    //   "email":"cobaa33@gmail.com",
-    //   "password":"cobaa2344",
-    //   "password_confirmation":"cobaa2344",
-    //   "city":"Karawang",
-    //   "houseNumber":"12",
-    //   "phoneNumber":"081132323398",
-
-    // }
     console.log('data', data);
+    dispatch(setLoading(true));
+    dispatch(signUpAction(data,photoReducer,navigation))
 
     // Axios.post('http://foodmarket-backend.buildwithangga.id/api/register', data)
     //   .then(res => {
     //     console.log('data success: ', res.data);
+    //     if (photoReducer.isUploadPhoto) {
+    //       const photoForUpload = new FormData();
+    //       photoForUpload.append('file', photoReducer);
+    //       Axios.post(
+    //         'http://foodmarket-backend.buildwithangga.id/api/user/photo',
+    //         photoForUpload,
+    //         {
+    //           headers: {
+    //             Authorization: `${res.data.data.token_type} ${res.data.data.access_token}`,
+    //             'Content-Type': 'multipart/form-data',
+    //           },
+    //         },
+    //       )
+    //         .then(resUpload => {
+    //           console.log('success upload: ', resUpload);
+    //         })
+    //         .catch(errUpload => {
+    //           showMessage('Upload photo tidak berhasil');
+    //           console.log(errUpload);
+    //         });
+    //     }
+    //     dispatch(setLoading(false));
+    //     showMessage('Register Success', 'success');
     //     navigation.replace('SuccessSignUp');
     //   })
     //   .catch(err => {
-    //     console.log('sign up error : ', err);
-    //     console.log('What happened? ', err.message);
+    //     console.log('sign up error : ', err.response);
+    //     dispatch(setLoading(false));
+    //     showMessage(err.response.data.message);
     //   });
-
- 
-          Axios.post('http://foodmarket-backend.buildwithangga.id/api/register', data)
-      .then(res => {
-        console.log('data success: ', res.data);
-        showToast('Register Success', 'success');
-        navigation.replace('SuccessSignUp');
-      })
-      .catch(err => {
-        console.log('sign up error : ', err.response.data.message);
-        showToast(err?.response?.data?.message, 'success');
-      })
-
-
   };
-
-  const showToast = (message, type) => {
-    showMessage({
-      message: message,
-      type: type === 'success' ? 'success' : 'danger',
-      backgroundColor: type === 'success' ? '#1ABC9C' : '#D9435E',
-      titleStyle:{ fontSize: 14, fontFamily: 'Poppins-Regular' }
-    });
-  }
 
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -78,7 +72,7 @@ const SignUpAddress = ({navigation}) => {
         <Header
           title="Address"
           subTitle="Make sure it’s valid"
-          onBack={() => {}}
+          onBack={() => navigation.goBack()}
         />
         <View style={styles.container}>
           <TextInput

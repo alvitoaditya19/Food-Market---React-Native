@@ -10,6 +10,9 @@ import ItemValue from './ItemValue';
 import EmptyOrder from './EmptyOrder';
 import OrderTabSection from './OrderTabSection';
 import ProfileTabSection from './ProfileTabSection';
+import Loading from './Loading';
+import Number from './Number';
+
 
 export {
   Header,
@@ -24,4 +27,6 @@ export {
   EmptyOrder,
   OrderTabSection,
   ProfileTabSection,
+  Loading,
+  Number
 };

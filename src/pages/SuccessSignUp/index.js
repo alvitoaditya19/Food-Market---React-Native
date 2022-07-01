@@ -13,7 +13,12 @@ const SuccessSignUp = ({navigation}) => {
       <Text style={styles.subTitle}>some foods as a self-reward</Text>
       <Gap height={30} />
       <View style={styles.buttonContainer}>
-        <Button text="Find Foods" onPress={() => navigation.replace('MainApp')}/>
+        <Button
+          text="Find Foods"
+          onPress={() =>
+            navigation.reset({index: 0, routes: [{name: 'MainApp'}]})
+          }
+        />
       </View>
     </View>
   );
@@ -26,7 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'white'
+    backgroundColor: 'white',
   },
   title: {
     fontSize: 20,
